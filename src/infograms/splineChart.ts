@@ -3,7 +3,7 @@ import fi from 'apexcharts/dist/locales/fi.json';
 
 export function splineChart(
   dateRange: Array | number,
-  migDaysTotal: Array | number,
+  migDaysTotal: Array,
   prevMed: Array,
   Ajovy: Array | number
 ) {

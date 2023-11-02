@@ -233,7 +233,7 @@ window.Webflow.push(() => {
         const date = Date.parse(sections[i].id);
         infogramDateRange.push(date);
         const obj = {
-          x: sections[i].id.replace('-', '/'),
+          x: sections[i].id /*.replace('-', '/') <-- doesn't work in Firefox*/,
           y: sections[i].querySelectorAll("[mig='true']").length,
         };
         infogramMigDaysTotal.push(obj);
