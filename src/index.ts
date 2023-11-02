@@ -162,14 +162,6 @@ window.Webflow.push(() => {
             infogramNoritren.push(obj);
           }
         }
-        // mig days
-        /*if (data[i].migraine === true) {
-          const { date } = data[i];
-          const obj = {
-            date: data[i].date,
-          };
-          infogramMigDays.push(date);
-        }*/
       } // for data
 
       // ON PROGRESS Update the text in Last updated
