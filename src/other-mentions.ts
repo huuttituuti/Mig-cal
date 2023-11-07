@@ -8,4 +8,7 @@ export const otherMentions = [
   {
     '2023-04-14': 'Toinen yritys lopettaa Noritren. Ei onnistunut.',
   },
+  {
+    '2023-10-12': 'Korona 12.-16.10.',
+  },
 ];

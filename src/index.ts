@@ -172,6 +172,17 @@ window.Webflow.push(() => {
       infogramNoritren.sort((a, b) => {
         return a.x - b.x;
       });
+      // If the last nortitren amount is not 0
+      if (infogramNoritren[infogramNoritren.length - 1].y !== 0) {
+        // If the last item's date is not same as todays date
+        if (infogramNoritren[infogramNoritren.length - 1].x !== Date.parse(new Date())) {
+          const obj = {
+            x: Date.parse(new Date()),
+            y: infogramNoritren[infogramNoritren.length - 1].y,
+          };
+          infogramNoritren.push(obj);
+        }
+      }
 
       // create lines for otherMeds
       const medsNames = medsArray.map(({ name }) => name);
@@ -245,12 +256,16 @@ window.Webflow.push(() => {
       });
       infogramMigDaysTotal.length = todayDateIndex;
 
-      // If infogram tabs is clicked, render infograms
+      // If infogram tabs is clicked, render infograms (but only on first time)
       const inforgamTab = document.querySelector("[data-w-tab='Infogrammit']");
-      inforgamTab?.addEventListener('click', function () {
-        heatMap(infogramMigDaysTotal);
-        splineChart(infogramDateRange, infogramMigDaysTotal, infogramNoritren, infogramAjovyDate);
-      });
+      inforgamTab?.addEventListener(
+        'click',
+        function () {
+          heatMap(infogramMigDaysTotal);
+          splineChart(infogramDateRange, infogramMigDaysTotal, infogramNoritren, infogramAjovyDate);
+        },
+        { once: true }
+      );
     } else {
       console.log(err);
     }
