@@ -3,9 +3,7 @@ import fi from 'apexcharts/dist/locales/fi.json';
 
 export function heatMap(migDaysTotal: Array | number) {
   const container = document.querySelector("[infogram='heatmap']");
-  const div = document.createElement('div');
-  div.setAttribute('infogram', 'spline-heatmap');
-  container?.appendChild(div);
+  const div = document.querySelector("[infogram='spline-heatmap']");
 
   const arr2021 = [];
   const arr2022 = [];

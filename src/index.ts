@@ -165,6 +165,9 @@ window.Webflow.push(() => {
       } // for data
 
       // ON PROGRESS Update the text in Last updated
+      createdAt.sort((a, b) => {
+        return a - b;
+      });
       const lastUpdated = new Date(createdAt[createdAt.length - 1]).toLocaleDateString('fi-FI');
       document.getElementById('update-date').textContent = lastUpdated;
 
