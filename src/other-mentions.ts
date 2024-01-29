@@ -11,4 +11,7 @@ export const otherMentions = [
   {
     '2023-10-12': 'Korona 12.-16.10.',
   },
+  {
+    '2024-01-03': 'Noritren annoksen lasku 30 mg -> 25 mg',
+  },
 ];
