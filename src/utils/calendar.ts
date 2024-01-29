@@ -85,6 +85,7 @@ export function calendar(years: Array) {
   // add anchor links to months
   for (let i = 0; i < navMonthWrpChildren.length; i++) {
     const attrYear = navMonthWrpChildren[i].firstChild?.firstChild.href.toString().slice(39, 43);
+    //console.log(attrYear);
     const attrMonth = navMonthWrpChildren[i].firstChild?.firstChild.href.toString().slice(44, 46);
     // DOTS - On page load, add important dots next to navigation months
     const attr = `${attrYear}-${attrMonth}`;

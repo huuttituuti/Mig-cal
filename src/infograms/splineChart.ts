@@ -20,7 +20,7 @@ export function splineChart(
         data: migDaysTotal,
       },
       {
-        name: 'noritren (kpl)',
+        name: 'noritren (mg)',
         data: prevMed,
       },
       {
