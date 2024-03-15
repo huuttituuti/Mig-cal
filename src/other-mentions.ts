@@ -14,4 +14,7 @@ export const otherMentions = [
   {
     '2024-01-03': 'Noritren annoksen lasku 30 mg -> 25 mg',
   },
+  {
+    '2024-02-03': 'Noritren annoksen lasku 25 mg -> 12 mg -> 0 mg',
+  },
 ];
