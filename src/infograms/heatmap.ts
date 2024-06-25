@@ -44,7 +44,7 @@ export function heatMap(migDaysTotal: Array | number) {
       },
     ],
     chart: {
-      height: 400,
+      height: 500,
       type: 'heatmap',
       locales: [fi],
       defaultLocale: 'fi',
