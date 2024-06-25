@@ -8748,7 +8748,7 @@
         }
       ],
       chart: {
-        height: 400,
+        height: 500,
         type: "heatmap",
         locales: [fi_default],
         defaultLocale: "fi"
