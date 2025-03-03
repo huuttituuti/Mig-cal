@@ -34,25 +34,27 @@ export function createLinesPrev(name: string, icon: string) {
       // If there's no 0 in the previous array items, find dates between beginning and current
       if (allPrevDates.find((el) => el.amount === 0) === undefined) {
         groups.push(getDates(medicationValues[0].id, nextDate.id));
-      } /*If there is 0, get dates one after the 0 and current*/ else {
+      } else {
+        // If there is 0, get dates one after the 0 and current
         const nextZero = allPrevDates.find((el) => el.amount === 0);
         const nextStartIndex = medicationValues.indexOf(nextZero) + 1;
         groups.push(getDates(medicationValues[nextStartIndex].id, nextDate.id));
-
-        // If the last medicationValues array item's amount isn't 0, continue line till todays date
-        if (medicationValues[medicationValues.length - 1].amount !== 0) {
-          const continuationIndex = medicationValues.indexOf(nextDate) + 1;
-
-          const todayYear = new Date().getFullYear();
-          const todayMonth = (new Date().getMonth() + 1).toString().padStart(2, '0');
-          const todayDay = new Date().getDate().toString().padStart(2, '0');
-          const todayDate = todayYear + '-' + todayMonth + '-' + todayDay;
-
-          groups.push(getDates(medicationValues[continuationIndex].id, todayDate));
-        }
       }
     }
+    // If the last medicationValues array item's amount isn't 0, continue line till todays date
+    if (medicationValues[medicationValues.length - 1].amount !== 0) {
+      const continuationIndex = medicationValues.indexOf(nextDate); //+ 1;
+
+      const todayYear = new Date().getFullYear();
+      const todayMonth = (new Date().getMonth() + 1).toString().padStart(2, '0');
+      const todayDay = new Date().getDate().toString().padStart(2, '0');
+      const todayDate = todayYear + '-' + todayMonth + '-' + todayDay;
+
+      groups.push(getDates(medicationValues[continuationIndex].id, todayDate));
+    }
   } // for medicationvalues
+
+  //console.log(medicationValues);
 
   // If the last medicationValues array item's amount isn't 0, continue //forever// till todays date
   /*if (medicationValues[medicationValues.length - 1].amount !== 0) {

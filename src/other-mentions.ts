@@ -1,5 +1,11 @@
 export const otherMentions = [
   {
+    '2022-01-10': 'Candesartan aloitettu.',
+  },
+  {
+    '2022-03-21': 'Noritren aloitettu, Candesartan lopetettu.',
+  },
+  {
     '2022-08-05': 'Ajovy aloitettu.',
   },
   {
@@ -16,5 +22,8 @@ export const otherMentions = [
   },
   {
     '2024-02-03': 'Noritren annoksen lasku 25 mg -> 12 mg -> 0 mg',
+  },
+  {
+    '2024-11-16': 'Dienorette aloitettu',
   },
 ];

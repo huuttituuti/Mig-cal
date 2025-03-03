@@ -25,6 +25,7 @@ window.Webflow.push(() => {
   const createdAt = [];
   // INFOGRAM
   const infogramNoritren = [];
+  const infogramDienorette = [];
   const infogramAjovyDate = [
     { x: Date.parse('2022/08/05'), y: 1 },
     { x: Date.parse(new Date()), y: 1 },
@@ -160,6 +161,14 @@ window.Webflow.push(() => {
               y: data[i].other_med[0].noritren.amount_mg,
             };
             infogramNoritren.push(obj);
+          } // dienorette
+          else if (data[i].other_med[0].dienorette.stamp === true) {
+            const dateFull = data[i].date;
+            const obj = {
+              x: Date.parse(dateFull.replaceAll('-', '/')),
+              y: data[i].other_med[0].dienorette.amount_mg,
+            };
+            infogramDienorette.push(obj);
           }
         }
       } // for data
@@ -171,19 +180,25 @@ window.Webflow.push(() => {
       const lastUpdated = new Date(createdAt[createdAt.length - 1]).toLocaleDateString('fi-FI');
       document.getElementById('update-date').textContent = lastUpdated;
 
-      // Arrange by time
-      infogramNoritren.sort((a, b) => {
-        return a.x - b.x;
-      });
-      // If the last nortitren amount is not 0
-      if (infogramNoritren[infogramNoritren.length - 1].y !== 0) {
-        // If the last item's date is not same as todays date
-        if (infogramNoritren[infogramNoritren.length - 1].x !== Date.parse(new Date())) {
-          const obj = {
-            x: Date.parse(new Date()),
-            y: infogramNoritren[infogramNoritren.length - 1].y,
-          };
-          infogramNoritren.push(obj);
+      /* ARRANGE INFOGRAM ARRAYS BY TIME */
+      arrangeByTime(infogramNoritren);
+      arrangeByTime(infogramDienorette);
+
+      function arrangeByTime(array: Array) {
+        // Arrange by time
+        array.sort((a, b) => {
+          return a.x - b.x;
+        });
+        // If the last nortitren amount is not 0
+        if (array[array.length - 1].y !== 0) {
+          // If the last item's date is not same as todays date
+          if (array[array.length - 1].x !== Date.parse(new Date())) {
+            const obj = {
+              x: Date.parse(new Date()),
+              y: array[array.length - 1].y,
+            };
+            array.push(obj);
+          }
         }
       }
 
@@ -265,7 +280,13 @@ window.Webflow.push(() => {
         'click',
         function () {
           heatMap(infogramMigDaysTotal);
-          splineChart(infogramDateRange, infogramMigDaysTotal, infogramNoritren, infogramAjovyDate);
+          splineChart(
+            infogramDateRange,
+            infogramMigDaysTotal,
+            infogramNoritren,
+            infogramDienorette,
+            infogramAjovyDate
+          );
         },
         { once: true }
       );

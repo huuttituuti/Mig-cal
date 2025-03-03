@@ -8299,6 +8299,12 @@
   init_live_reload();
   var otherMentions = [
     {
+      "2022-01-10": "Candesartan aloitettu."
+    },
+    {
+      "2022-03-21": "Noritren aloitettu, Candesartan lopetettu."
+    },
+    {
       "2022-08-05": "Ajovy aloitettu."
     },
     {
@@ -8315,6 +8321,9 @@
     },
     {
       "2024-02-03": "Noritren annoksen lasku 25 mg -> 12 mg -> 0 mg"
+    },
+    {
+      "2024-11-16": "Dienorette aloitettu"
     }
   ];
 
@@ -8541,15 +8550,15 @@
           const nextZero = allPrevDates.find((el) => el.amount === 0);
           const nextStartIndex = medicationValues.indexOf(nextZero) + 1;
           groups.push(getDates(medicationValues[nextStartIndex].id, nextDate.id));
-          if (medicationValues[medicationValues.length - 1].amount !== 0) {
-            const continuationIndex = medicationValues.indexOf(nextDate) + 1;
-            const todayYear = (/* @__PURE__ */ new Date()).getFullYear();
-            const todayMonth = ((/* @__PURE__ */ new Date()).getMonth() + 1).toString().padStart(2, "0");
-            const todayDay = (/* @__PURE__ */ new Date()).getDate().toString().padStart(2, "0");
-            const todayDate = todayYear + "-" + todayMonth + "-" + todayDay;
-            groups.push(getDates(medicationValues[continuationIndex].id, todayDate));
-          }
         }
+      }
+      if (medicationValues[medicationValues.length - 1].amount !== 0) {
+        const continuationIndex = medicationValues.indexOf(nextDate);
+        const todayYear = (/* @__PURE__ */ new Date()).getFullYear();
+        const todayMonth = ((/* @__PURE__ */ new Date()).getMonth() + 1).toString().padStart(2, "0");
+        const todayDay = (/* @__PURE__ */ new Date()).getDate().toString().padStart(2, "0");
+        const todayDate = todayYear + "-" + todayMonth + "-" + todayDay;
+        groups.push(getDates(medicationValues[continuationIndex].id, todayDate));
       }
     }
     for (let i = 0; i < groups.length; i++) {
@@ -8715,6 +8724,7 @@
     const arr2022 = [];
     const arr2023 = [];
     const arr2024 = [];
+    const arr2025 = [];
     for (let i = 0; i < migDaysTotal.length; i++) {
       const year = migDaysTotal[i].x.slice(0, 4);
       const migs = migDaysTotal[i].y;
@@ -8726,10 +8736,16 @@
         arr2023.push(migs);
       } else if (year === "2024") {
         arr2024.push(migs);
+      } else if (year === "2025") {
+        arr2025.push(migs);
       }
     }
     const options = {
       series: [
+        {
+          name: "2025",
+          data: arr2025
+        },
         {
           name: "2024",
           data: arr2024
@@ -8748,7 +8764,7 @@
         }
       ],
       chart: {
-        height: 500,
+        height: 600,
         type: "heatmap",
         locales: [fi_default],
         defaultLocale: "fi"
@@ -8857,13 +8873,13 @@
   // src/infograms/splineChart.ts
   init_live_reload();
   var import_apexcharts2 = __toESM(require_apexcharts_common(), 1);
-  function splineChart(dateRange, migDaysTotal, prevMed, Ajovy) {
+  function splineChart(dateRange, migDaysTotal, prevMed, otherMed, Ajovy) {
     const container = document.querySelector("[infogram='spline']");
     const div = document.createElement("div");
     div.setAttribute("infogram", "spline-chart");
     container?.appendChild(div);
-    const colorsDataLabels = ["#cea700", "#ff0000", "#0099ff"];
-    const colors = ["#fccf0c", "#ff0000", "#0099ff"];
+    const colorsDataLabels = ["#cea700", "#ff0000", "#ee82ee", "#0099ff"];
+    const colors = ["#fccf0c", "#ff0000", "#ee82ee", "#0099ff"];
     const options = {
       series: [
         {
@@ -8873,6 +8889,10 @@
         {
           name: "noritren (mg)",
           data: prevMed
+        },
+        {
+          name: "dienorette (mg)",
+          data: otherMed
         },
         {
           name: "ajovy",
@@ -8991,6 +9011,7 @@
     const medsArray = [];
     const createdAt = [];
     const infogramNoritren = [];
+    const infogramDienorette = [];
     const infogramAjovyDate = [
       { x: Date.parse("2022/08/05"), y: 1 },
       { x: Date.parse(/* @__PURE__ */ new Date()), y: 1 }
@@ -9003,6 +9024,21 @@
     request.onload = function(err) {
       const data = JSON.parse(this.response);
       if (request.status >= 200 && request.status < 400) {
+        let arrangeByTime2 = function(array) {
+          array.sort((a, b) => {
+            return a.x - b.x;
+          });
+          if (array[array.length - 1].y !== 0) {
+            if (array[array.length - 1].x !== Date.parse(/* @__PURE__ */ new Date())) {
+              const obj = {
+                x: Date.parse(/* @__PURE__ */ new Date()),
+                y: array[array.length - 1].y
+              };
+              array.push(obj);
+            }
+          }
+        };
+        var arrangeByTime = arrangeByTime2;
         let yearsArray = Array.from(
           Object.keys(data).map((i) => Number(data[i].date.substring(0, 4)))
         );
@@ -9098,6 +9134,13 @@
                 y: data[i].other_med[0].noritren.amount_mg
               };
               infogramNoritren.push(obj);
+            } else if (data[i].other_med[0].dienorette.stamp === true) {
+              const dateFull = data[i].date;
+              const obj = {
+                x: Date.parse(dateFull.replaceAll("-", "/")),
+                y: data[i].other_med[0].dienorette.amount_mg
+              };
+              infogramDienorette.push(obj);
             }
           }
         }
@@ -9106,18 +9149,8 @@
         });
         const lastUpdated = new Date(createdAt[createdAt.length - 1]).toLocaleDateString("fi-FI");
         document.getElementById("update-date").textContent = lastUpdated;
-        infogramNoritren.sort((a, b) => {
-          return a.x - b.x;
-        });
-        if (infogramNoritren[infogramNoritren.length - 1].y !== 0) {
-          if (infogramNoritren[infogramNoritren.length - 1].x !== Date.parse(/* @__PURE__ */ new Date())) {
-            const obj = {
-              x: Date.parse(/* @__PURE__ */ new Date()),
-              y: infogramNoritren[infogramNoritren.length - 1].y
-            };
-            infogramNoritren.push(obj);
-          }
-        }
+        arrangeByTime2(infogramNoritren);
+        arrangeByTime2(infogramDienorette);
         const medsNames = medsArray.map(({ name }) => name);
         const medsFiltered = medsArray.filter(({ name }, i) => !medsNames.includes(name, i + 1));
         for (let i = 0; i < medsFiltered.length; i++) {
@@ -9178,7 +9211,13 @@
           "click",
           function() {
             heatMap(infogramMigDaysTotal);
-            splineChart(infogramDateRange, infogramMigDaysTotal, infogramNoritren, infogramAjovyDate);
+            splineChart(
+              infogramDateRange,
+              infogramMigDaysTotal,
+              infogramNoritren,
+              infogramDienorette,
+              infogramAjovyDate
+            );
           },
           { once: true }
         );

@@ -9,6 +9,7 @@ export function heatMap(migDaysTotal: Array | number) {
   const arr2022 = [];
   const arr2023 = [];
   const arr2024 = [];
+  const arr2025 = [];
 
   for (let i = 0; i < migDaysTotal.length; i++) {
     const year = migDaysTotal[i].x.slice(0, 4);
@@ -21,11 +22,17 @@ export function heatMap(migDaysTotal: Array | number) {
       arr2023.push(migs);
     } else if (year === '2024') {
       arr2024.push(migs);
+    } else if (year === '2025') {
+      arr2025.push(migs);
     }
   }
 
   const options = {
     series: [
+      {
+        name: '2025',
+        data: arr2025,
+      },
       {
         name: '2024',
         data: arr2024,
@@ -44,7 +51,7 @@ export function heatMap(migDaysTotal: Array | number) {
       },
     ],
     chart: {
-      height: 500,
+      height: 600,
       type: 'heatmap',
       locales: [fi],
       defaultLocale: 'fi',

@@ -5,14 +5,15 @@ export function splineChart(
   dateRange: Array | number,
   migDaysTotal: Array,
   prevMed: Array,
+  otherMed: Array,
   Ajovy: Array | number
 ) {
   const container = document.querySelector("[infogram='spline']");
   const div = document.createElement('div');
   div.setAttribute('infogram', 'spline-chart');
   container?.appendChild(div);
-  const colorsDataLabels = ['#cea700', '#ff0000', '#0099ff'];
-  const colors = ['#fccf0c', '#ff0000', '#0099ff'];
+  const colorsDataLabels = ['#cea700', '#ff0000', '#ee82ee', '#0099ff'];
+  const colors = ['#fccf0c', '#ff0000', '#ee82ee', '#0099ff'];
   const options = {
     series: [
       {
@@ -22,6 +23,10 @@ export function splineChart(
       {
         name: 'noritren (mg)',
         data: prevMed,
+      },
+      {
+        name: 'dienorette (mg)',
+        data: otherMed,
       },
       {
         name: 'ajovy',
